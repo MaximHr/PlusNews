@@ -16,6 +16,7 @@
     "react-froala-wysiwyg": "^4.0.8",
     "react-html-parser": "^2.0.2",
     "react-moment": "^1.1.1",
+    "react-responsive": "*",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-share": "^4.4.0",

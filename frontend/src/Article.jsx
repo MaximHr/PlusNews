@@ -56,7 +56,7 @@ const Article = () => {
 
     return( 
         <>
-            <Navbar categories={categories}/>
+            <Navbar categories={categories} isArticle={true}/>
             <div className='Article'>
                 <div className="container" style={{
                     zoom: size + '%'

@@ -558,5 +558,116 @@ p[data-f-id="pbf"] {
     border: none;
     height: 35px;
 }
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 900;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.cookie {
+    cursor: default;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    height: 255px;
+    z-index: 1000;
+    width: 400px;
+    display: flex;
+    position: fixed;
+    box-shadow: 0 0 10px rgb(92, 92, 92);
+    flex-direction: column;
+    p {
+        margin-top: 0.75rem;
+        font-size: 1rem;
+        line-height: 140%;
+    }
+    button {
+        margin-top: 2rem;
+        background-color: $secondery-color;
+        outline: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        padding: 0.5rem 3.25rem;
+        border-radius: 1000px;
+        cursor: pointer;
+        &:hover {
+            opacity: 0.92;
+        }
+    }
+    div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-family: monospace;
+        font-size: 1rem;
+    }
+    img {
+        width: 60px;
+    }
+}
+
+.search-box{
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+}
+.input-search{
+    height: 50px;
+    width: 50px;
+    border-style: none;
+    padding: 10px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    outline: none;
+    border-radius: 25px;
+    transition: all .5s ease-in-out;
+    background-color: #22a6b3;
+    padding-right: 40px;
+    color:#fff;
+}
+.input-search::placeholder{
+    color:rgba(255,255,255,.5);
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 100;
+}
+.btn-search{
+    width: 50px;
+    height: 50px;
+    border-style: none;
+    font-size: 20px;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    color:#ffffff ;
+    background-color:transparent;
+    pointer-events: painted;  
+}
+.btn-search:focus ~ .input-search{
+    width: 300px;
+    border-radius: 0px;
+    background-color: transparent;
+    border-bottom:1px solid rgba(255,255,255,.5);
+    transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+.input-search:focus{
+    width: 300px;
+    border-radius: 0px;
+    background-color: transparent;
+    border-bottom:1px solid rgba(255,255,255,.5);
+    transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+  
+  
+  
+
+
 
 @import './responsive';

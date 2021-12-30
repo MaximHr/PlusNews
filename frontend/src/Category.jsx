@@ -14,7 +14,6 @@ const Category = ({categories}) => {
         axios.get(`/article/get/byCategory/${decodeURI(location.pathname.replace('/category/', ''))}`)
             .then((res) => {
                 if(res.status === 200) {
-                    console.log(res)
                     setArticles(res.data);
                 }
             }).catch(err => {

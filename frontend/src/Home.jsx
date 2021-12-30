@@ -2,14 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import axios from 'axios';
 import Card from './Card';
+import Cookie from './Cookie';
 
 const Home = ({categories}) => {
     const [articles, setArticles] = useState([]);
+    const [showCookie, setShowCookie] = useState(false);
+
     useEffect(() => {
         axios.get('/article/get/recent')
             .then((res) => {
                 if(res.status === 200) {
                     setArticles(res.data);
+                    const getCookie = localStorage.getItem('cookie');
+                    if(getCookie === null) {
+                        setShowCookie(true);
+                    }
                 }
             }).catch(err => {
                 console.log(err);
@@ -37,6 +44,12 @@ const Home = ({categories}) => {
                 })
             }
             </div>
+            {
+                showCookie ? (<>
+                    <div className="background"></div>
+                    <Cookie setShowCookie={setShowCookie}/>
+                </>) : <></>
+            }
         </div>
     </>
     )
