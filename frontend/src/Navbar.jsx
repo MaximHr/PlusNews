@@ -11,7 +11,6 @@ const Navbar = ({setArticles, categories, category, isArticle}) => {
     const isMobile = useMediaQuery({query: '(max-width:480px)'})
     const [hide, setHide] = useState(false);
     const searchBar = useRef('');
-
     const typeHandler = (e) => {
         setSearch(e.target.value);
         if(e.target.value.replaceAll(' ', '') !== '') {

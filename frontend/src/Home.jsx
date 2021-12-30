@@ -7,7 +7,7 @@ import Cookie from './Cookie';
 const Home = ({categories}) => {
     const [articles, setArticles] = useState([]);
     const [showCookie, setShowCookie] = useState(false);
-
+    
     useEffect(() => {
         axios.get('/article/get/recent')
             .then((res) => {
