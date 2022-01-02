@@ -29,21 +29,21 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     const [img, setImg] = useState(null);
     const alert = useAlert();
     const [imgur, setImgur] = useState({});
-    // useEffect(() => {
-    // // api rate limit
-    //     fetch("https://api.imgur.com/3/credits", {
-    //         method: "GET",
-    //         headers: {
-    //             Authorization: "Client-ID 8f873fefbd4cb50",
-    //             Accept: "application/json",
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             console.log(response)
-    //         });
+    useEffect(() => {
+    // api rate limit
+        fetch("https://api.imgur.com/3/credits", {
+            method: "GET",
+            headers: {
+                Authorization: "Client-ID 8f873fefbd4cb50",
+                Accept: "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response)
+            });
 
-    // }, [])
+    }, [])
 
     useEffect(() => {
         axios.get('/category/get')

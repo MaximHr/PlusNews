@@ -5,6 +5,10 @@
             grid-template-columns: repeat(3, 1fr);
         }
     }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 @media only screen and (max-width: 1220px) {
     .Article {
@@ -21,6 +25,10 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
         }  
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
     }
     .Navbar {
         padding: 1.5rem 0rem;
@@ -62,10 +70,40 @@
             grid-template-columns: repeat(1, 1fr);
         }
     }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
    
 }
 
 @media only screen and (max-width: 480px) {
+    .react-confirm-alert-body-element {
+        position: fixed;
+    }
+    .Main {
+        h1 {
+            font-size: 2rem;
+        }
+        .adminb {
+            .btn {
+                font-size: 1rem;
+            }
+        }
+    }
+    .createCategory {
+        .together {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-top: -2rem;
+        }
+        .list {
+            width: 90vw;
+        }
+    }
     .Navbar {
         img {
             width: 230px !important;
@@ -82,13 +120,48 @@
             grid-template-columns: repeat(1, 1fr);
         }
     }
+    
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
     .Article {
         .container {
             width: 100vw;
             padding: 2rem;
         }
     }
-    
+    .Admin {
+        input[type='text'], input[type='password'] {
+            width: 90vw !important;
+        }
+    }
+    .adminc {
+        h1 {
+            margin: 3rem 0 !important;
+            margin-top: 4rem !important;
+        }
+        .btn-red {
+            position: relative;
+            transform: translateX(15%);
+            margin: 0.5rem auto;
+        }
+        .upload {
+            flex-direction: column;
+            gap: 3rem;
+        }
+        .left {
+            margin: 0 auto;
+        }
+        .right {
+            margin: auto;
+            margin-bottom: 2rem;
+        }
+        .abs {
+            position: relative;
+            top: 0;
+        }
+    }
 }
 
 .nav-mobile {

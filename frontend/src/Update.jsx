@@ -231,6 +231,8 @@ const Update = ({article, setPage}) => {
                     <div className='Article bc-grey'>
                         <div className="container">
                             {ReactHtmlParser(text)}
+                            <hr />
+                            <p className='article-author'>Автор: {author}</p>
                         </div>
                     </div>
                 </div>

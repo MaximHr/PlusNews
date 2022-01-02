@@ -469,8 +469,6 @@ p[data-f-id="pbf"] {
         -webkit-box-shadow: 0 0 30px #333;
         box-shadow: 0 0 30px #333;
         margin-left: 3.5rem;
-        
-        border: 3px solid #333;
     }
     .item {
         background-color: white;
@@ -486,8 +484,11 @@ p[data-f-id="pbf"] {
             background-color: #f4efff;
         }
     }
-    &:hover .dropdown .item{
-        display: block;
+    &:hover .dropdown{
+        border: 3px solid #333;
+        .item {
+            display: block;
+        }
     }
 }
 .views {

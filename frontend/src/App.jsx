@@ -28,7 +28,8 @@ const App = () => {
                 <Route path="/category/:category" element={<Category categories={categories}/>} />
                 <Route path='/article/:id' exact={true} element={<Article />}/>
                 <Route path='/admin' element={<Admin setIsAdmin={setIsAdmin}/>}/>
-                <Route path='/admin/:name' element={isAdmin ? <Main /> : <Navigate to='/'/>}/>
+                <Route path='/admin/:name' element={isAdmin ? <Main /> : <Navigate to='/admin/
+                ' />}/>
             </Routes>
         </div>
     )
