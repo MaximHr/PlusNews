@@ -18,6 +18,7 @@ const Update = ({article, setPage}) => {
     const [img, setImg] = useState(null)
     const [imgur, setImgur] = useState('');
     const alert = useAlert();
+    let akisasus = [], index = 0;
 
     useEffect(() => {
         axios.get('/category/get')
@@ -205,11 +206,54 @@ const Update = ({article, setPage}) => {
                         
                         <div className='editor-container'>  
                             <FroalaEditorComponent 
-                                // config={{
-                                //     imageUploadRemoteUrls: true,
-                                //     imageUploadParam:'image',
-                                //     imageUploadURL: '/image_upload'
-                                // }}
+                                config={{
+                                    imageUpload: true,
+                                    events: {
+                                        'image.beforePasteUpload': function (img) {
+                                            fetch(img.src)
+                                            .then(res => res.blob())
+                                            .then(blob => {
+                                                const file = new File([blob], 'dot.png', blob)
+                                                const formData = new FormData();
+                                                formData.append('image', file);
+                                                fetch("https://api.imgur.com/3/image", {
+                                                method: "POST",
+                                                headers: {
+                                                    Authorization: "Client-ID 8f873fefbd4cb50",
+                                                    Accept: "application/json",
+                                                },
+                                                body: formData,
+                                            })
+                                                .then((response) => response.json())
+                                                .then((response) => {
+                            
+                                                    console.log(response.data)
+                                                    akisasus.push(response.data.link);
+                                                    console.log('push')
+                                                    
+                                                }).catch(err => {
+                                                    console.log(err)
+                                                })
+                                            })
+                                        },
+                                        'image.loaded': (img) => {
+                                            // set once next is hitted (will useState work)
+                                            // console.log(clicked)
+                                            //   if(clicked) {
+                                                setTimeout(() => {
+                                                    if(index < akisasus.length){
+                                                    // console.log(pastedImg)
+
+                                                        img[0].setAttribute('src', akisasus[index]);
+                                                        index++;
+                                                        console.log(akisasus)
+                                                        console.log('length: ' + akisasus.length, 'index:' + index);
+                                                    }
+                                                }, 5500);
+                                                // }
+                                        },
+                                    }
+                                }}
                                 tag='textarea'
                                 model={text} 
                                 onModelChange={handleChange}
