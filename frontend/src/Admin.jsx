@@ -3,9 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
-// https://www.youtube.com/watch?v=hVFy8S2yCH4
-// https://cloudinary.com/console/c-6778f9cb550ae93df134d48a297819
-
 const Admin = ({setIsAdmin}) => {
     const [name, setName] = useState('');
     const [pass, setPass] = useState('');
@@ -28,7 +25,7 @@ const Admin = ({setIsAdmin}) => {
                     setName('');
                     setPass('');
                     setIsAdmin(true);
-                    navigate(`/admin/${name}`);
+                    navigate(`/znaesh/${name}`);
                 }
             }).catch(err => {
                 alert.show('Грешна парола или потребителско име', {

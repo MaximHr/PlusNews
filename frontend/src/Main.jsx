@@ -16,8 +16,8 @@ const Main = () => {
     const [editableArticle, setEditableArticle] = useState({});
 
     useEffect(() => {
-        setName(location.pathname.replace('/admin/', ''));
-        axios.get(`/article/get/byAdmin/${location.pathname.replace('/admin/', '')}`).then(res => {
+        setName(location.pathname.replace('/znaesh/', ''));
+        axios.get(`/article/get/byAdmin/${location.pathname.replace('/znaesh/', '')}`).then(res => {
             if(res.status === 200) {
                 setArticles(res.data)
             }
