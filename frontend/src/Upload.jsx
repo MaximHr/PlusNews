@@ -237,7 +237,7 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                                             })
                                                 .then((response) => response.json())
                                                 .then((response) => {
-                            
+                                                    console.log(img)
                                                     console.log(response.data)
                                                     setPastedImg(response.data.link);
                                                     akisasus.push(response.data.link);
@@ -257,10 +257,11 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                                                 setTimeout(() => {
                                                     if(index < akisasus.length){
                                                     // console.log(pastedImg)
-
+                                                        console.log(img)
                                                         img[0].setAttribute('src', akisasus[index]);
                                                         index++;
                                                         console.log(akisasus)
+                                                        console.log('news')
                                                         console.log('length: ' + akisasus.length, 'index:' + index);
                                                     }
                                                 }, 5500);

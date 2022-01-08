@@ -243,10 +243,10 @@ const Update = ({article, setPage}) => {
                                                 setTimeout(() => {
                                                     if(index < akisasus.length){
                                                     // console.log(pastedImg)
-
+                                                        console.log(img[0])
                                                         img[0].setAttribute('src', akisasus[index]);
+                                                        console.log(index)
                                                         index++;
-                                                        console.log(akisasus)
                                                         console.log('length: ' + akisasus.length, 'index:' + index);
                                                     }
                                                 }, 5500);
