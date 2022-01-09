@@ -11,7 +11,12 @@ import axios from 'axios';
 const App = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [categories, setCategories] = useState([]);
-
+    const meta = () => {
+        const meta = document.createElement('meta');
+        meta.setAttribute('name', 'viewport');
+        meta.setAttribute('content', 'width=device-width, initial-scale=1');
+        document.querySelector('head').appendChild(meta);
+    }
     useEffect(() => {
         axios.get('/category/get')
             .then(res => {
@@ -19,7 +24,9 @@ const App = () => {
                     setCategories(res.data)
                 }
             }).catch(err => console.error(err));
-    });
+        
+        meta();
+    }, []);
 
     return(
         <div className="app">
