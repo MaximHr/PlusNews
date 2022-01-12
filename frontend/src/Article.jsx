@@ -71,15 +71,15 @@ const Article = () => {
                         className='share'
                         quote={article.title} 
                         hashtag='news' 
-                        url={location.href}
+                        url='http://plusnews.bg'
                     >
                         <FacebookIcon size={50}/>
                     </FacebookShareButton>
                     <TwitterShareButton 
-                        url={location.href}
+                        url='http://plusnews.bg'
                         className='share'
                         title={article.title}
-                        hashtags={['news', 'plusnews.bg']}
+                        hashtags={['news']}
                     >
                         <TwitterIcon size={50}/>
                     </TwitterShareButton>

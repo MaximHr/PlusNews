@@ -9,6 +9,7 @@ const Home = ({categories}) => {
     const [showCookie, setShowCookie] = useState(false);
     
     useEffect(() => {
+        console.log(window.location)
         axios.get('/article/get/recent')
             .then((res) => {
                 if(res.status === 200) {
