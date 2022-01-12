@@ -10,6 +10,28 @@ import {
     TwitterIcon
 } from 'react-share';
 
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+// function eraseCookie(name) {   
+//     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+// }
 const Article = () => {
     const [size, setSize] = useState(100);
     const location = useLocation();
@@ -25,9 +47,9 @@ const Article = () => {
                     setArticle(res.data)
 
                     //checks if it is a new visitor and if not - saves it
-                    const getItem = localStorage.getItem(location.pathname.replace('/article/', ''));
+                    const getItem = getCookie(location.pathname.replace('/article/', ''));
                     if(getItem === null) {
-                        localStorage.setItem(location.pathname.replace('/article/', ''), 'true');
+                        setCookie(location.pathname.replace('/article/', ''), 'true');
 
                         axios.put(`/article/newViewer/${location.pathname.replace('/article/', '')}`, 1)
                             .then(res => {
