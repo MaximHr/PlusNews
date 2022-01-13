@@ -11,7 +11,6 @@ import axios from 'axios';
 const App = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [categories, setCategories] = useState([]);
-
     
     useEffect(() => {
         axios.get('/category/get')
