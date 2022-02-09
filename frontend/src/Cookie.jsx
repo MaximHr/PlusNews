@@ -13,7 +13,7 @@ const Cookie = ({setShowCookie}) => {
                 <h1 >Съгласие за бисквитки</h1>
             </div>
             <p style={{paddingLeft: '15px'}}>Този уебсайт използва бисквитки с цел подобряване на вашето преживяване.</p>
-            <button onClick={acceptHandler}>Приеми</button>
+            <button onClick={acceptHandler}>Приемам</button>
         </div>
     )
 }
