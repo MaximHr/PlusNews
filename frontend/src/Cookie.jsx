@@ -7,13 +7,13 @@ const Cookie = ({setShowCookie}) => {
         localStorage.setItem('cookie', true);
     }
     return( 
-        <div className="cookie">
+        <div className="cookie" >
             <div>
                 <img src={cookie} alt="Cookie" />
-                <h1>Cookie Consent</h1>
+                <h1 >Съгласие за бисквитки</h1>
             </div>
-            <p>This website uses cookies to provide better browsing experince on our website.</p>
-            <button onClick={acceptHandler}>Accept</button>
+            <p style={{paddingLeft: '15px'}}>Този уебсайт използва бисквитки с цел подобряване на вашето преживяване.</p>
+            <button onClick={acceptHandler}>Приеми</button>
         </div>
     )
 }
