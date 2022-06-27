@@ -122,11 +122,11 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
         setImg(e.target.files[0])
     }
     const load = () => {
-        setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1')))
-        
+        // setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1')))
+        console.log();
         setTimeout(() => {
             console.log(sources, text);
-            sources.forEach(source => {
+            text.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1')).forEach(source => {
                 fetch(source)
                 .then(res => res.blob())
                 .then(blob => {
