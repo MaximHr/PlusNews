@@ -14,19 +14,19 @@ import 'froala-editor/js/plugins.pkgd.min.js';
 const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     const editor = useRef('');
     const [stranica, setStranica] = useState(0);
-    const [title, setTitle] = useState(' Олаф Шолц подкрепя задължителната ваксинация срещу Covid 19');
-    const [author, setAuthor] = useState('Александър Ботйов');
-    const [category, setCategory] = useState('Политика');
-    const [url, setUrl] = useState('https://img.novini.bg/uploads/news_pictures/2021-48/webp/751678.webp');
+    // const [title, setTitle] = useState(' Олаф Шолц подкрепя задължителната ваксинация срещу Covid 19');
+    // const [author, setAuthor] = useState('Александър Ботйов');
+    // const [category, setCategory] = useState('Политика');
+    // const [url, setUrl] = useState('https://img.novini.bg/uploads/news_pictures/2021-48/webp/751678.webp');
     
     const [sources, setSources] = useState([]);
     const [uploadedImages, setUploadedImages] = useState([]);
 
-    // const [title, setTitle] = useState(' ');
+    const [title, setTitle] = useState(' ');
     const [categories, setCategories] = useState([]);
-    // const [author, setAuthor] = useState('');
-    // const [category, setCategory] = useState('');
-    // const [url, setUrl] = useState('');
+    const [author, setAuthor] = useState('');
+    const [category, setCategory] = useState('');
+    const [url, setUrl] = useState('');
     
     const [img, setImg] = useState(null);
     const alert = useAlert();
