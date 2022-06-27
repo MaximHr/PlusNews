@@ -14,21 +14,22 @@ import 'froala-editor/js/plugins.pkgd.min.js';
 const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     const editor = useRef('');
     const [stranica, setStranica] = useState(0);
-    // const [title, setTitle] = useState(' Олаф Шолц подкрепя задължителната ваксинация срещу Covid 19');
-    // const [author, setAuthor] = useState('Александър Ботйов');
-    // const [category, setCategory] = useState('Политика');
-    // const [url, setUrl] = useState('https://img.novini.bg/uploads/news_pictures/2021-48/webp/751678.webp');
-    const [pastedImg, setPastedImg] = useState('https://miro.medium.com/max/880/0*H3jZONKqRuAAeHnG.jpg');
-    const [title, setTitle] = useState(' ');
+    const [title, setTitle] = useState(' Олаф Шолц подкрепя задължителната ваксинация срещу Covid 19');
+    const [author, setAuthor] = useState('Александър Ботйов');
+    const [category, setCategory] = useState('Политика');
+    const [url, setUrl] = useState('https://img.novini.bg/uploads/news_pictures/2021-48/webp/751678.webp');
+    
+    const [sources, setSources] = useState([]);
+    const [uploadedImages, setUploadedImages] = useState([]);
+
+    // const [title, setTitle] = useState(' ');
     const [categories, setCategories] = useState([]);
-    const [author, setAuthor] = useState('');
-    const [clicked, setClicked] = useState(false);
-    const [category, setCategory] = useState('');
-    let akisasus = [], index = 0;
-    const [url, setUrl] = useState('');
+    // const [author, setAuthor] = useState('');
+    // const [category, setCategory] = useState('');
+    // const [url, setUrl] = useState('');
+    
     const [img, setImg] = useState(null);
     const alert = useAlert();
-    const [imgur, setImgur] = useState({});
     useEffect(() => {
     // api rate limit
         fetch("https://api.imgur.com/3/credits", {
@@ -112,7 +113,6 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
         })
             .then((response) => response.json())
             .then((response) => {
-                setImgur(response.data);
                 setUrl(response.data.link)
             });
 
@@ -120,6 +120,39 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     const fileUpload = e => {
         console.log(e.target.files[0])
         setImg(e.target.files[0])
+    }
+    const load = () => {
+        setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
+        .map(x => x.replace(/.*src="([^"]*)".*/, '$1')));
+
+        sources.forEach(source => {
+            fetch(source)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], 'dot.png', blob)
+                const formData = new FormData();
+                formData.append('image', file);
+                fetch("https://api.imgur.com/3/image", {
+                    method: "POST",
+                    headers: {
+                        Authorization: "Client-ID 8f873fefbd4cb50",
+                        Accept: "application/json",
+                    },
+                    body: formData,
+                })
+                .then((response) => response.json())
+                .then((response) => {
+                    setUploadedImages([...uploadedImages, response.data.link]);
+    
+                    setText(text.replace(source, response.data.link));
+                    // setText(text.replace(source, 'penis.png'));
+                    
+                }).catch(err => {
+                    console.log(err)
+                })
+            })
+        });
+        console.log(sources);
     }
     return( 
         <div className={stranica === 2 ? 'bc-grey adminc' : 'adminc'}>
@@ -217,74 +250,14 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                             <FroalaEditorComponent 
                                 config={{
                                     placeholderText: 'Твоята статия',
-                                    imageUpload: true,
-                                    // imageMaxSize: 5 * 1024 * 1024,
-                                    events: {
-                                        'image.beforePasteUpload': function (img) {
-                                            fetch(img.src)
-                                            .then(res => res.blob())
-                                            .then(blob => {
-                                                const file = new File([blob], 'dot.png', blob)
-                                                const formData = new FormData();
-                                                formData.append('image', file);
-                                                fetch("https://api.imgur.com/3/image", {
-                                                method: "POST",
-                                                headers: {
-                                                    Authorization: "Client-ID 8f873fefbd4cb50",
-                                                    Accept: "application/json",
-                                                },
-                                                body: formData,
-                                            })
-                                                .then((response) => response.json())
-                                                .then((response) => {
-                                                    console.log(img)
-                                                    console.log(response.data)
-                                                    setPastedImg(response.data.link);
-                                                    akisasus.push(response.data.link);
-                                                    console.log('push')
-                                                    
-                                                }).catch(err => {
-                                                    console.log(err)
-                                                })
-                                            })
-                                            
-                                          },
-                                          'image.loaded': (img
-                                            ) => {
-                                              // set once next is hitted (will useState work)
-                                              console.log(clicked)
-                                            //   if(clicked) {
-                                                setTimeout(() => {
-                                                    if(index < akisasus.length){
-                                                    // console.log(pastedImg)
-                                                        console.log(img)
-                                                        img[0].setAttribute('src', akisasus[index]);
-                                                        index++;
-                                                        console.log(akisasus)
-                                                        console.log('news')
-                                                        console.log('length: ' + akisasus.length, 'index:' + index);
-                                                    }
-                                                }, 5500);
-                                                // }
-                                          },
-                                          'imagesLoaded': function (data) {
-                                            // Do something here.
-                                            // this is the editor instance.
-                                            console.log('images loaded')
-                                            console.log(data);
-                                          }
-                                    }
-
                                 }}
                                 tag='textarea'
                                 model={text} 
                                 onModelChange={handleChange}
                                 ref={editor}
                             />
-                            {/* <button onClick={() => {
-                                setClicked(true)
-                            }}>Check</button> */}
                         </div>
+                        <button onClick={load} className='btn m'>Ready</button>
                     </div>
                 ) : (
                     <div className='bc-grey'>
