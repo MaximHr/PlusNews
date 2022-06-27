@@ -122,8 +122,8 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
         setImg(e.target.files[0])
     }
     const load = () => {
-        setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
-        .map(x => x.replace(/.*src="([^"]*)".*/, '$1')));
+        setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1')))
+        
         setTimeout(() => {
             console.log(sources, text);
             sources.forEach(source => {
@@ -153,7 +153,7 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                     })
                 })
             });
-        }, 5000);
+        }, 2000);
        
     }
     return( 
