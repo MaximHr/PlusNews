@@ -153,7 +153,7 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                     })
                 })
             });
-        }, 1000)
+        }, 5000);
        
     }
     return( 
