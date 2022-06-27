@@ -143,7 +143,7 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                 .then((response) => response.json())
                 .then((response) => {
                     setUploadedImages([...uploadedImages, response.data.link]);
-    
+                    console.log(response.data)
                     setText(text.replace(source, response.data.link));
                     // setText(text.replace(source, 'penis.png'));
                     
