@@ -124,35 +124,37 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     const load = () => {
         setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm)
         .map(x => x.replace(/.*src="([^"]*)".*/, '$1')));
-
-        sources.forEach(source => {
-            fetch(source)
-            .then(res => res.blob())
-            .then(blob => {
-                const file = new File([blob], 'dot.png', blob)
-                const formData = new FormData();
-                formData.append('image', file);
-                fetch("https://api.imgur.com/3/image", {
-                    method: "POST",
-                    headers: {
-                        Authorization: "Client-ID 8f873fefbd4cb50",
-                        Accept: "application/json",
-                    },
-                    body: formData,
+        setTimeout(() => {
+            console.log(sources, text);
+            sources.forEach(source => {
+                fetch(source)
+                .then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], 'dot.png', blob)
+                    const formData = new FormData();
+                    formData.append('image', file);
+                    fetch("https://api.imgur.com/3/image", {
+                        method: "POST",
+                        headers: {
+                            Authorization: "Client-ID 8f873fefbd4cb50",
+                            Accept: "application/json",
+                        },
+                        body: formData,
+                    })
+                    .then((response) => response.json())
+                    .then((response) => {
+                        setUploadedImages([...uploadedImages, response.data.link]);
+                        console.log(response.data)
+                        setText(text.replace(source, response.data.link));
+                        // setText(text.replace(source, 'penis.png'));
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
                 })
-                .then((response) => response.json())
-                .then((response) => {
-                    setUploadedImages([...uploadedImages, response.data.link]);
-                    console.log(response.data)
-                    setText(text.replace(source, response.data.link));
-                    // setText(text.replace(source, 'penis.png'));
-                    
-                }).catch(err => {
-                    console.log(err)
-                })
-            })
-        });
-        console.log(sources);
+            });
+        }, 1000)
+       
     }
     return( 
         <div className={stranica === 2 ? 'bc-grey adminc' : 'adminc'}>
