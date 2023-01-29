@@ -8,20 +8,12 @@ import Card from './Card';
 import axios from 'axios';
 import ReactHtmlParser from 'react-html-parser';
 
-// Import all Froala Editor plugins;
 import 'froala-editor/js/plugins.pkgd.min.js';
 
 const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     const editor = useRef('');
     const [stranica, setStranica] = useState(0);
-    // const [title, setTitle] = useState(' Олаф Шолц подкрепя задължителната ваксинация срещу Covid 19');
-    // const [author, setAuthor] = useState('Александър Ботйов');
-    // const [category, setCategory] = useState('Политика');
-    // const [url, setUrl] = useState('https://img.novini.bg/uploads/news_pictures/2021-48/webp/751678.webp');
-    
-    const [sources, setSources] = useState([]);
-    const [uploadedImages, setUploadedImages] = useState([]);
-
+    const [urlImages, seturlImages] = useState([]);
     const [title, setTitle] = useState(' ');
     const [categories, setCategories] = useState([]);
     const [author, setAuthor] = useState('');
@@ -30,21 +22,6 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
     
     const [img, setImg] = useState(null);
     const alert = useAlert();
-    useEffect(() => {
-    // api rate limit
-        fetch("https://api.imgur.com/3/credits", {
-            method: "GET",
-            headers: {
-                Authorization: "Client-ID 8f873fefbd4cb50",
-                Accept: "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-            });
-
-    }, [])
 
     useEffect(() => {
         axios.get('/category/get')
@@ -55,12 +32,60 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
             }).catch(err => console.error(err));
     }, []);
 
-    const nextHandler = () => {
-        setStranica(1)
+    const imagesHandler = () => {
+        let links = [];
+        
+        urlImages?.map(async(imageTag, index) => {
+
+            //взима blob url-овете
+            let source = imageTag.match(/src="[^"]*" /)[0].replace('src="', '').replace('"', '');
+            
+            //превръща blob url-овете в blob files
+            let blob = await fetch(source).then(r => r.blob());
+        
+            const formData = new FormData();
+            formData.append('image', blob);
+
+            // upload-ва снимките към imgur
+            const response = await fetch("https://api.imgur.com/3/image", {
+                method: "POST",
+                headers: {
+                    Authorization: "Client-ID 8f873fefbd4cb50",
+                    Accept: "application/json",
+                },
+                body: formData,
+            });
+            const data = await response.json();
+            links.push(data.data.link);
+
+            if(links.length == urlImages.length) {
+                // here all images are uploaded
+                
+                let html = text;
+                const regex = /src="[^"]*" /gm;
+                const searchedValue = html.match(regex);
+                let obj = {};
+                
+                searchedValue.forEach((image, index) => {
+                    obj[image] = links[index];
+                })
+        
+                setText(html.replace(regex, function(match) {
+                    return `src='${obj[match]}'`;
+                }));
+                alert.success('Снимките са качени !')
+            }
+            
+
+        });
     }
+
     const handleChange = (model) => {
+        // взима img таговете от текста.
         setText(model);
+        seturlImages(model.match(/<img [^>]*src="[^"]*"[^>]*>/gm));
     }
+
     const uploadHandler = () => {
         if(category !== '') {
             setArticle({
@@ -79,7 +104,6 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                 articleImage: url,
                 adminName: name
             }).then(res => {
-                console.log(res)
                 alert.show('Статията е публикувана', {
                     type: 'success'
                 })
@@ -90,7 +114,6 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                     setTitle('');
                     setPage(0)
                 }, 1000)
-                console.log(res)
             }).catch(err => {
                 alert.show('Попълни всички полета', {
                     type: 'error'
@@ -118,44 +141,9 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
 
     }
     const fileUpload = e => {
-        console.log(e.target.files[0])
         setImg(e.target.files[0])
     }
-    const load = () => {
-        // setSources(text.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1')))
-        console.log();
-        setTimeout(() => {
-            console.log(sources, text);
-            text.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1')).forEach(source => {
-                fetch(source)
-                .then(res => res.blob())
-                .then(blob => {
-                    const file = new File([blob], 'dot.png', blob)
-                    const formData = new FormData();
-                    formData.append('image', file);
-                    fetch("https://api.imgur.com/3/image", {
-                        method: "POST",
-                        headers: {
-                            Authorization: "Client-ID 8f873fefbd4cb50",
-                            Accept: "application/json",
-                        },
-                        body: formData,
-                    })
-                    .then((response) => response.json())
-                    .then((response) => {
-                        setUploadedImages([...uploadedImages, response.data.link]);
-                        console.log(response.data)
-                        setText(text.replace(source, response.data.link));
-                        // setText(text.replace(source, 'penis.png'));
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-            });
-        }, 2000);
-       
-    }
+   
     return( 
         <div className={stranica === 2 ? 'bc-grey adminc' : 'adminc'}>
             <h1>Твоята нова статия</h1>
@@ -231,7 +219,7 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                             </button>
                             <button 
                                 className="btn" 
-                                onClick={nextHandler}>Напред <i className="fas fa-arrow-right"></i>
+                                onClick={() => setStranica(1)}>Напред <i className="fas fa-arrow-right"></i>
                             </button>
                         </div>
                     </div>
@@ -251,6 +239,7 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                         <div className='editor-container'>  
                             <FroalaEditorComponent 
                                 config={{
+                                    imageUpload: true,
                                     placeholderText: 'Твоята статия',
                                 }}
                                 tag='textarea'
@@ -258,8 +247,8 @@ const Upload = ({ name, setPage, setText, text, article, setArticle}) => {
                                 onModelChange={handleChange}
                                 ref={editor}
                             />
+                            <button style={{width: '130px'}} title='Качва всичките снимки от статията' className="btn m" onClick={imagesHandler}>Качи снимки</button>
                         </div>
-                        <button onClick={load} className='btn m'>Ready</button>
                     </div>
                 ) : (
                     <div className='bc-grey'>

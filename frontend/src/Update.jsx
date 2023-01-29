@@ -17,8 +17,56 @@ const Update = ({article, setPage}) => {
     const [text, setText] = useState(article.text);
     const [img, setImg] = useState(null)
     const [imgur, setImgur] = useState('');
+    const [urlImages, seturlImages] = useState([]);
     const alert = useAlert();
-    let akisasus = [], index = 0;
+
+    const imagesHandler = () => {
+        let links = [];
+        
+        urlImages?.map(async(imageTag, index) => {
+
+            //взима blob url-овете
+            let source = imageTag.match(/src="[^"]*" /)[0].replace('src="', '').replace('"', '');
+            
+            console.log(source);
+            //превръща blob url-овете в blob files
+            let blob = await fetch(source).then(r => r.blob());
+        
+            const formData = new FormData();
+            formData.append('image', blob);
+
+            // upload-ва снимките към imgur
+            const response = await fetch("https://api.imgur.com/3/image", {
+                method: "POST",
+                headers: {
+                    Authorization: "Client-ID 8f873fefbd4cb50",
+                    Accept: "application/json",
+                },
+                body: formData,
+            });
+            const data = await response.json();
+            links.push(data.data.link);
+
+            if(links.length == urlImages.length) {
+                // here all images are uploaded
+                
+                let html = text;
+                const regex = /src="[^"]*" /gm;
+                const searchedValue = html.match(regex);
+                let obj = {};
+                
+                searchedValue.forEach((image, index) => {
+                    obj[image] = links[index];
+                })
+        
+                setText(html.replace(regex, function(match) {
+                    return `src='${obj[match]}'`;
+                }));
+                alert.success('Снимките са качени !')
+            }
+
+        });
+    }
 
     useEffect(() => {
         axios.get('/category/get')
@@ -50,6 +98,7 @@ const Update = ({article, setPage}) => {
     }
     const handleChange = (model) => {
         setText(model);
+        seturlImages(model.match(/<img [^>]*src="[^"]*"[^>]*>/gm));
     }
     const deleteHandler = () => {
         axios.delete(`/article/delete/${article._id}`)
@@ -207,58 +256,14 @@ const Update = ({article, setPage}) => {
                         <div className='editor-container'>  
                             <FroalaEditorComponent 
                                 config={{
-                                    imageUpload: true,
-                                    events: {
-                                        'image.beforePasteUpload': function (img) {
-                                            fetch(img.src)
-                                            .then(res => res.blob())
-                                            .then(blob => {
-                                                const file = new File([blob], 'dot.png', blob)
-                                                const formData = new FormData();
-                                                formData.append('image', file);
-                                                fetch("https://api.imgur.com/3/image", {
-                                                method: "POST",
-                                                headers: {
-                                                    Authorization: "Client-ID 8f873fefbd4cb50",
-                                                    Accept: "application/json",
-                                                },
-                                                body: formData,
-                                            })
-                                                .then((response) => response.json())
-                                                .then((response) => {
-                            
-                                                    console.log(response.data)
-                                                    akisasus.push(response.data.link);
-                                                    console.log('push')
-                                                    
-                                                }).catch(err => {
-                                                    console.log(err)
-                                                })
-                                            })
-                                        },
-                                        'image.loaded': (img) => {
-                                            // set once next is hitted (will useState work)
-                                            // console.log(clicked)
-                                            //   if(clicked) {
-                                                setTimeout(() => {
-                                                    if(index < akisasus.length){
-                                                    // console.log(pastedImg)
-                                                        console.log(img[0])
-                                                        img[0].setAttribute('src', akisasus[index]);
-                                                        console.log(index)
-                                                        index++;
-                                                        console.log('length: ' + akisasus.length, 'index:' + index);
-                                                    }
-                                                }, 5500);
-                                                // }
-                                        },
-                                    }
+                                    placeholderText: 'Твоята статия'
                                 }}
                                 tag='textarea'
                                 model={text} 
                                 onModelChange={handleChange}
                                 ref={editor}
                             />
+                             <button style={{width: '130px'}} title='Качва всичките снимки от статията' className="btn m" onClick={imagesHandler}>Качи снимки</button>
                         </div> 
                     </div>
                 ) : (
